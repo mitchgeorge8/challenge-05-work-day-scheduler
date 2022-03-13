@@ -90,8 +90,6 @@ let loadEvents = function() {
         let id = events[i].id;
         createEvent(text, id);
     }
-
-    auditSchedule();
 };
 
 let createEvent = function(text, id) {
@@ -103,5 +101,6 @@ setInterval(function() {
     auditSchedule();
 }, (1000 * 60));
 
-// load events from localStorage
+// load events from localStorage and audit schedule
 loadEvents();
+auditSchedule();
