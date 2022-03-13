@@ -17,16 +17,19 @@ let auditSchedule = function() {
             block.addClass('past');
             block.removeClass('present');
             block.removeClass('future');
+            block.prop('readonly', true)
         }
         else if (i == hourNow) {
             block.removeClass('past');
             block.addClass('present');
             block.removeClass('future');
+            block.prop('readonly', false)
         }
         else if (i > hourNow) {
             block.removeClass('past');
             block.removeClass('present');
             block.addClass('future');
+            block.prop('readonly', false)
         }
     };
 };
@@ -42,7 +45,7 @@ $('.time-block').on('click', '.saveBtn', function() {
     
     // get event text
     let text = eventEl.val().trim();
-    if (text === "") {
+    if (!text) {
         return false;
     }
 
@@ -56,7 +59,8 @@ $('.time-block').on('click', '.saveBtn', function() {
     };
 
     // if the events array contains nothing, simply push new event
-    if (events.length === 0) {
+    if (!events) {
+        events = [];
         events.push(event);
     }
     else {
@@ -72,4 +76,32 @@ $('.time-block').on('click', '.saveBtn', function() {
     saveEvents();
 });
 
-auditSchedule();
+let loadEvents = function() {
+    // get events from localStorage
+    events = JSON.parse(localStorage.getItem('events'));
+
+    if (!events) {
+        return false;
+    }
+
+    // loop over events and send them to createEvent
+    for (i = 0; i < events.length; i++) {
+        let text = events[i].text;
+        let id = events[i].id;
+        createEvent(text, id);
+    }
+
+    auditSchedule();
+};
+
+let createEvent = function(text, id) {
+    $('#' + id).val(text);
+}
+
+// update the color coding every 60 seconds
+setInterval(function() {
+    auditSchedule();
+}, (1000 * 60));
+
+// load events from localStorage
+loadEvents();
