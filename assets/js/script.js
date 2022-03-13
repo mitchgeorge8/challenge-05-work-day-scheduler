@@ -45,9 +45,6 @@ $('.time-block').on('click', '.saveBtn', function() {
     
     // get event text
     let text = eventEl.val().trim();
-    if (!text) {
-        return false;
-    }
 
     // get the text area id
     let eventId = eventEl.attr('id');
